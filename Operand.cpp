@@ -1,6 +1,8 @@
 #include "Operand.hpp"
 # include <inttypes.h>
 
+// getType
+
 template <>
 eOperandType    Operand<int8_t>::getType( void ) const {
     return eOperandType::Int8;

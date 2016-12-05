@@ -1,6 +1,5 @@
 #include "Factory.hpp"
 #include "Operand.hpp"
-#include <sstream>
 
 Factory::Factory( void ) { }
 Factory::~Factory( void ) { }
@@ -11,41 +10,30 @@ Factory & Factory::getInstance( void ) {
     return factory;
 }
 
-// create IOperand
-template <class T>
-static T try_convert( std::string const & value ) {
-    std::stringstream   s(value);
-    T                   result;
-
-    s >> result;
-    if (!s) {
-        std::cout << "Bad convertion" << std::endl;
-    }
-    return result;
-}
-
 IOperand const * Factory::createInt8( std::string const & value ) const {
-    int8_t result = try_convert<int8_t>( value );
-    return new Operand<int8_t>( result );
+    return new Operand<int8_t>( value );
 }
 
 IOperand const * Factory::createInt16( std::string const & value ) const {
-
+    return new Operand<int16_t>( value );
 }
 
 IOperand const * Factory::createInt32( std::string const & value ) const {
-
+    return new Operand<int32_t>( value );
 }
 
 IOperand const * Factory::createFloat( std::string const & value ) const {
-
+    return new Operand<float>( value );
 }
 
 IOperand const * Factory::createDouble( std::string const & value ) const {
-
+    return new Operand<double>( value );
 }
 
 IOperand const * Factory::createOperand( eOperandType type, std::string const & value ) const {
+    (eOperandType *)() = {
+
+    };
     switch ( type ) {
         case eOperandType::Int8:   return createInt8( value );
         case eOperandType::Int16:  return createInt16( value );
