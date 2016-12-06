@@ -10,8 +10,8 @@ class Operand : public IOperand
 {
 
 private:
-    const eOperandType    _type:
-    const std::string     _value;
+    eOperandType    _type;
+    std::string     _value;
 
 public:
 
@@ -21,8 +21,31 @@ public:
 	eOperandType    getType( void ) const;
 	int             getPrecision( void ) const { return (int)getType(); }
 
-	IOperand const * operator+( IOperand const & rhs ) const {
-        if ()
+	IOperand const * operator+( IOperand const & rhs ) const
+    {
+        if (getType() >= rhs.getType())
+        {
+            T lhs_value = Utils::stringTo<T>( toString() );
+            T rhs_value = Utils::stringTo<T>( rhs.toString() );
+
+            return Factory::getInstance().createOperand(
+                    getType(),
+                    Utils::toString<T>( lhs_value + rhs_value )
+            );
+        }
+        else
+        {
+            IOperand const * rhs_promoted = Factory::getInstance().createOperand(
+                    getType(),
+                    rhs.toString()
+            );
+
+            IOperand * result = new IOperand( static_cast<IOperand>( this ) + rhs_promoted );
+
+            delete rhs_promoted;
+
+            return result;
+        }
     }
 	IOperand const * operator-( IOperand const & rhs ) const {
     }
@@ -34,7 +57,7 @@ public:
     }
 
 	std::string const & toString( void ) const {
-        return Utils::toString( _value );
+        return _value;
     }
 
 };

@@ -30,17 +30,21 @@ IOperand const * Factory::createDouble( std::string const & value ) const {
     return new Operand<double>( value );
 }
 
-IOperand const * Factory::createOperand( eOperandType type, std::string const & value ) const {
-    (eOperandType *)() = {
-
+IOperand const * Factory::createOperand( eOperandType type, std::string const & value ) const
+{
+    static IOperand const * ( Factory::*func [] )( std::string const & ) const = {
+        &Factory::createInt8,
+        &Factory::createInt16,
+        &Factory::createInt32,
+        &Factory::createFloat,
+        &Factory::createDouble
     };
-    switch ( type ) {
-        case eOperandType::Int8:   return createInt8( value );
-        case eOperandType::Int16:  return createInt16( value );
-        case eOperandType::Int32:  return createInt32( value );
-        case eOperandType::Float:  return createFloat( value );
-        case eOperandType::Double: return createDouble( value );
-        default:                   break ;
+    
+    int index = static_cast<int>( type );
+
+    if ( index < 0 || (unsigned int)index >= sizeof( func ) / sizeof( func[0] ) ) {
+        return nullptr;
     }
-    return nullptr;
+
+    return ( *func[ index ] )( value );
 }
