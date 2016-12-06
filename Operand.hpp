@@ -19,7 +19,7 @@ public:
     virtual ~Operand( void ) {};
 
 	eOperandType    getType( void ) const;
-	int             getPrecision( void ) const { return (int)getType(); }
+	int             getPrecision( void ) const { return static_cast<int>( getType() ); }
 
 	IOperand const * operator+( IOperand const & rhs ) const
     {
@@ -35,25 +35,17 @@ public:
         }
         else
         {
-            IOperand const * rhs_promoted = Factory::getInstance().createOperand(
-                    getType(),
-                    rhs.toString()
+            IOperand const * promoted = Factory::getInstance().createOperand(
+                    rhs.getType(),
+                    toString()
             );
 
-            IOperand * result = new IOperand( static_cast<IOperand>( this ) + rhs_promoted );
+            IOperand const * result = *promoted + rhs;
 
-            delete rhs_promoted;
+            delete promoted;
 
             return result;
         }
-    }
-	IOperand const * operator-( IOperand const & rhs ) const {
-    }
-	IOperand const * operator*( IOperand const & rhs ) const {
-    }
-	IOperand const * operator/( IOperand const & rhs ) const {
-    }
-	IOperand const * operator%( IOperand const & rhs ) const {
     }
 
 	std::string const & toString( void ) const {

@@ -32,19 +32,11 @@ IOperand const * Factory::createDouble( std::string const & value ) const {
 
 IOperand const * Factory::createOperand( eOperandType type, std::string const & value ) const
 {
-    static IOperand const * ( Factory::*func [] )( std::string const & ) const = {
-        &Factory::createInt8,
-        &Factory::createInt16,
-        &Factory::createInt32,
-        &Factory::createFloat,
-        &Factory::createDouble
-    };
-    
     int index = static_cast<int>( type );
 
-    if ( index < 0 || (unsigned int)index >= sizeof( func ) / sizeof( func[0] ) ) {
+    if ( index < 0 || (unsigned int)index > Factory::getInstance().func_count ) {
         return nullptr;
     }
 
-    return ( *func[ index ] )( value );
+    return (Factory::getInstance().*func_array[ index ] )( value );
 }

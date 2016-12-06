@@ -7,6 +7,15 @@ class Factory {
 
 public:
 
+    IOperand const * ( Factory::*func_array [5] )( std::string const & ) const = {
+        &Factory::createInt8,
+        &Factory::createInt16,
+        &Factory::createInt32,
+        &Factory::createFloat,
+        &Factory::createDouble
+    };
+    const unsigned int    func_count = sizeof( func_array ) / sizeof( func_array[0] );
+    
     Factory( void );
     ~Factory( void );
 
