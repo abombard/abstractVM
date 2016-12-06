@@ -38,5 +38,5 @@ IOperand const * Factory::createOperand( eOperandType type, std::string const & 
         return nullptr;
     }
 
-    return (Factory::getInstance().*func_array[ index ] )( value );
+    return ( Factory::getInstance().*func_array[ index ] )( value );
 }

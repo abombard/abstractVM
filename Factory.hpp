@@ -15,7 +15,7 @@ public:
         &Factory::createDouble
     };
     const unsigned int    func_count = sizeof( func_array ) / sizeof( func_array[0] );
-    
+
     Factory( void );
     ~Factory( void );
 
