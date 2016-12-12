@@ -12,10 +12,14 @@ class Operand : public IOperand
 private:
     std::string     _value;
 
+	Operand( void ) { }
+
 public:
 
-    Operand( std::string value ) : _value( value ) {};
-    virtual ~Operand( void ) {};
+    Operand( std::string value ) : _value( value ) { }
+    virtual ~Operand( void ) { }
+	Operand( Operand const & op ) { _value = op._value; }
+	Operand const & operator=( Operand const & op ) { _value = op._value; }
 
 	virtual eOperandType    getType( void ) const;
 	virtual int             getPrecision( void ) const { return static_cast<int>( getType() ); }
