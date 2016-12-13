@@ -3,14 +3,12 @@
 # include <iostream>
 # include <list>
 # include "IOperand.hpp"
-# include "Factory.hpp"
 
 class AbstractVM {
 
 private:
 
-	Factory							factory;
-	std::list<IOperand const &>		_stack;
+	std::list<IOperand const *>		_stack;
 
 	AbstractVM( AbstractVM const & );
 	AbstractVM & operator=( AbstractVM const & );
@@ -20,10 +18,10 @@ public:
 	AbstractVM( void );
 	~AbstractVM( void );
 
-	void	push( IOperand const & );
+	void	push( IOperand const * );
 	void	pop( void );
 	void	dump( void );
-	void	assert( IOperand const & );
+	void	assert( IOperand const * );
 	void	add( void );
 	void	sub( void );
 	void	mul( void );

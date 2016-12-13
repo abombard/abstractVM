@@ -3,6 +3,7 @@
 
 # include "IOperand.hpp"
 # include "Factory.hpp"
+# include "GlobalFactory.hpp"
 # include "Utils.hpp"
 
 template <class T>
@@ -10,6 +11,7 @@ class Operand : public IOperand
 {
 
 private:
+
     std::string     _value;
 
 	Operand( void ) { }
@@ -31,14 +33,14 @@ public:
             T lhs_value = Utils::stringTo<T>( toString() );
             T rhs_value = Utils::stringTo<T>( rhs.toString() );
 
-            return Factory::getInstance().createOperand(
+            return factory.createOperand(
                     getType(),
                     Utils::toString<T>( lhs_value + rhs_value )
             );
         }
         else
         {
-            IOperand const * promoted = Factory::getInstance().createOperand(
+            IOperand const * promoted = factory.createOperand(
                     rhs.getType(),
                     toString()
             );
@@ -58,14 +60,14 @@ public:
             T lhs_value = Utils::stringTo<T>( toString() );
             T rhs_value = Utils::stringTo<T>( rhs.toString() );
 
-            return Factory::getInstance().createOperand(
+            return factory.createOperand(
                     getType(),
                     Utils::toString<T>( lhs_value - rhs_value )
             );
         }
         else
         {
-            IOperand const * promoted = Factory::getInstance().createOperand(
+            IOperand const * promoted = factory.createOperand(
                     rhs.getType(),
                     toString()
             );
@@ -85,14 +87,14 @@ public:
             T lhs_value = Utils::stringTo<T>( toString() );
             T rhs_value = Utils::stringTo<T>( rhs.toString() );
 
-            return Factory::getInstance().createOperand(
+            return factory.createOperand(
                     getType(),
                     Utils::toString<T>( lhs_value * rhs_value )
             );
         }
         else
         {
-            IOperand const * promoted = Factory::getInstance().createOperand(
+            IOperand const * promoted = factory.createOperand(
                     rhs.getType(),
                     toString()
             );
@@ -115,14 +117,14 @@ public:
 			if (rhs_value == 0)
 				throw DivideByZeroException( *this, rhs );
 
-            return Factory::getInstance().createOperand(
+            return factory.createOperand(
                     getType(),
                     Utils::toString<T>( lhs_value / rhs_value )
             );
         }
         else
         {
-            IOperand const * promoted = Factory::getInstance().createOperand(
+            IOperand const * promoted = factory.createOperand(
                     rhs.getType(),
                     toString()
             );
@@ -145,14 +147,14 @@ public:
 			if (rhs_value == 0)
 				throw DivideByZeroException( *this, rhs );
 
-            return Factory::getInstance().createOperand(
+            return factory.createOperand(
                     getType(),
                     Utils::toString<T>( lhs_value % rhs_value )
             );
         }
         else
         {
-            IOperand const * promoted = Factory::getInstance().createOperand(
+            IOperand const * promoted = factory.createOperand(
                     rhs.getType(),
                     toString()
             );
