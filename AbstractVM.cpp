@@ -128,7 +128,7 @@ void		AbstractVM::print( void ) {
 	if ( op->getType() != eOperandType::Int8 ) {
 		throw std::runtime_error("Operand is not an Int8");
 	}
-	
+
 	std::cout << op->toString() << std::endl;
 }
 

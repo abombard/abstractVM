@@ -3,6 +3,7 @@
 # include <iostream>
 # include <list>
 # include "IOperand.hpp"
+# include "Lexer.hpp"
 
 class AbstractVM {
 
@@ -14,9 +15,6 @@ private:
 	AbstractVM & operator=( AbstractVM const & );
 
 public:
-
-	void	(*instruction)();
-	IOperand const * arg;
 
 	AbstractVM( void );
 	~AbstractVM( void );

@@ -1,10 +1,9 @@
 #include <iostream>
-#include <vector>
-#include <sstream>
-#include <algorithm>
 #include <iterator>
 
 #include "AbstractVM.hpp"
+#include "Lexer.hpp"
+#include "Parser.hpp"
 
 int main() {
 
@@ -12,43 +11,19 @@ int main() {
 
 	std::string line;
 
-	while (std::getline(std::cin, line)) {
+	while (std::getline( std::cin, line )) {
+		Lexer 		lexer( line );
+		Parser		parser;
 
-		// split string in tokens
-		std::istringstream			iss( line );
-		std::vector<std::string>	tokens;
+		std::string	instruction;
+		TokenType	instructionId;
 
-		std::copy(
-			std::istream_iterator<std::string>( iss ),
-			std::istream_iterator<std::string>(),
-			std::back_inserter(tokens)
-		);
+		instructionId = lexer.getNextToken( &instruction );
 
-		// loop through tokens
-		TokenType	state, nextState;
+		std::string	argument;
+		TokenType	argumentId;
 
-		nextState = TokenType::Undefined;
-		for (auto it = tokens.begin(); it != tokens.end(); it ++) {
-			std::string token = *it;
-
-			// identify the token
-			for (int i = 0; i < sizeof(tokenIdArray) / sizeof(tokenIdArray[0]); i ++) {
-				TokenId	tokenId = tokenIdArray[i];
-
-				if (std::regex_match(token, tokenId.regex)) {
-					state = static_cast<TokenType>( i );
-
-					// check state
-					if ( state != nextState && nextState != TokenType::Undefined ) {
-						throw std::logic_error("Unexpected Token");
-					}
-					nextState = tokenId.nextState;
-				}
-			}
-			if ( nextState == TokenType::Undefined ) {
-				throw std::logic_error("Undefined token");
-			}
-		}
+		argumentId = lexer.getNextToken( &argument );
 	}
 
 	return 0;
