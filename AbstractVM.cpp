@@ -1,6 +1,6 @@
 #include "AbstractVM.hpp"
 
-AbstractVM::AbstractVM( void ) { }
+AbstractVM::AbstractVM( void ) : instruction( nullptr ), arg( nullptr ) { }
 AbstractVM::~AbstractVM( void ) { }
 
 void		AbstractVM::push( IOperand const * op ) {

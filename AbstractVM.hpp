@@ -15,6 +15,9 @@ private:
 
 public:
 
+	void	(*instruction)();
+	IOperand const * arg;
+
 	AbstractVM( void );
 	~AbstractVM( void );
 
