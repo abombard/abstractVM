@@ -4,20 +4,8 @@
 #include <sstream>
 #include <algorithm>
 
-static std::vector<Token>	split_line( std::string line ) {
-	std::vector<Token>	tokenArray;
+static TokenId				identifyTokenId( std::string token ) {
 
-	// split string in tokens
-	std::istringstream			iss( line );
-	std::vector<std::string>	tokens;
-
-	std::copy(
-		std::istream_iterator<std::string>( iss ),
-		std::istream_iterator<std::string>(),
-		std::back_inserter(tokens)
-	);
-
-	// identify tokens
 	static struct {
 		TokenId	id;
 		std::regex	regex;
@@ -34,25 +22,43 @@ static std::vector<Token>	split_line( std::string line ) {
 		{ TokenId::print, std::regex("print") },
 		{ TokenId::exit, std::regex("exit") },
 		{ TokenId::comment, std::regex(";.+") },
-		{ TokenId::digit, std::regex("((int8|int16|int32)\\([0-9]+\\)|(float|double)\\([0-9]+\\.[0-9]+\\))") },
+		{ TokenId::integerIdentifier, std::regex("(int8|int16|int32)") },
+		{ TokenId::integer, std::regex("[0-9]+") },
+		{ TokenId::decimalIdentifier, std::regex("(float|double)") },
+		{ TokenId::decimal, std::regex("[0-9]+\\.[0-9]+") },
 	};
 
-	for (auto it = tokens.begin(); it != tokens.end(); it ++) {
-		Token	token;
-
-		token.str = *it;
-		token.id = TokenId::undefined;
-
-		for (unsigned int i = 0; i < sizeof(tokenIdentifierArray) / sizeof(tokenIdentifierArray[0]); i ++) {
-			if ( std::regex_match( token.str, tokenIdentifierArray[i].regex ) ) {
-				token.id = tokenIdentifierArray[i].id;
-
-				break ;
-			}
+	for (unsigned int i = 0; i < sizeof(tokenIdentifierArray) / sizeof(tokenIdentifierArray[0]); i ++) {
+		if ( std::regex_match( token, tokenIdentifierArray[i].regex ) ) {
+			return tokenIdentifierArray[i].id;
 		}
+	}
+
+	return TokenId::undefined;
+}
+
+static std::vector<Token>	split_line( std::string line ) {
+	std::vector<Token>	tokenArray;
+
+	// split string in tokens
+	Token	token;
+
+	size_t	pos = 0;
+	size_t	newPos;
+
+	while ( newPos != std::string::npos ) {
+		newPos = line.find_first_of(" ()", pos);
+
+		token.str = line.substr( pos, newPos - pos );
+		token.id = identifyTokenId( token.str );
 
 		tokenArray.push_back(token);
+
+		pos = newPos + 1;
 	}
+
+	token.id = TokenId::EOL;
+	tokenArray.push_back(token);
 
 	return tokenArray;
 }

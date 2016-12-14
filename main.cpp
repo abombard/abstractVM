@@ -13,26 +13,26 @@ int main() {
 	std::string					line;
 
 	while (std::getline( std::cin, line )) {
+		std::cout << "line: " << line << std::endl;
 		lines.push_back( line );
 	}
 
-	try {
+	//try {
 
 	Lexer	lexer( lines );
 	Parser	parser;
-	for (auto it = lines.begin(); it != lines.end(); it ++) {
-		Token	token;
-		while (lexer.getNextToken( &token )) {
 
-			std::cout << token.str << std::endl;
-			parser.parse( token );
-		}
+	Token	token;
+	while (lexer.getNextToken( &token )) {
+
+		std::cout << token.str << std::endl;
+		parser.parse( token );
 	}
 
-	}
+	/*}
 	catch ( std::exception const & e ) {
 		std::cout << e.what();
-	}
+	}*/
 
 	return 0;
 }

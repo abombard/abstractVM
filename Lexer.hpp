@@ -17,7 +17,10 @@ enum class TokenId {
 	print,
 	exit,
 	comment,
-	digit,
+	integerIdentifier,
+	integer,
+	decimalIdentifier,
+	decimal,
 	EOL,
 	undefined,
 	none

@@ -2,6 +2,7 @@
 
 # include "AbstractVM.hpp"
 # include "Lexer.hpp"
+# include "Utils.hpp"
 
 class Parser {
 
@@ -28,13 +29,12 @@ public:
 		UnexpectedTokenException const & operator=( UnexpectedTokenException const & );
 
 	public:
-		UnexpectedTokenException( Token const & token ) throw() : std::logic_error("Unexpected token: " + token.str) { }
+		UnexpectedTokenException( Token const & token ) throw() : std::logic_error("Unexpected token:" + token.str + " of type " + Utils::tokenIdToString(token.id)) { }
 		virtual ~UnexpectedTokenException( void ) throw() {}
 		UnexpectedTokenException( UnexpectedTokenException const & );
 
 		virtual char const * what() const throw() {
-			std::string		err = std::string(std::logic_error::what());
-			return err.c_str();
+			return std::logic_error::what();
 		}
 	};
 };
