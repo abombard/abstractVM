@@ -9,21 +9,29 @@ int main() {
 
 	AbstractVM	avm;
 
-	std::string line;
+	std::vector<std::string>	lines;
+	std::string					line;
 
 	while (std::getline( std::cin, line )) {
-		Lexer 		lexer( line );
-		Parser		parser;
+		lines.push_back( line );
+	}
 
-		std::string	instruction;
-		TokenType	instructionId;
+	try {
 
-		instructionId = lexer.getNextToken( &instruction );
+	Lexer	lexer( lines );
+	Parser	parser;
+	for (auto it = lines.begin(); it != lines.end(); it ++) {
+		Token	token;
+		while (lexer.getNextToken( &token )) {
 
-		std::string	argument;
-		TokenType	argumentId;
+			std::cout << token.str << std::endl;
+			parser.parse( token );
+		}
+	}
 
-		argumentId = lexer.getNextToken( &argument );
+	}
+	catch ( std::exception const & e ) {
+		std::cout << e.what();
 	}
 
 	return 0;

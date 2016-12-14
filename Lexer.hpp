@@ -1,9 +1,10 @@
 #pragma once
 
 # include <iostream>
+# include <vector>
 # include <regex>
 
-enum class TokenType {
+enum class TokenId {
 	push = 0,
 	pop,
 	dump,
@@ -18,8 +19,14 @@ enum class TokenType {
 	comment,
 	digit,
 	EOL,
-	undefined
+	undefined,
+	none
 };
+
+typedef struct {
+	std::string		str;
+	TokenId			id;
+} Token;
 
 class Lexer {
 
@@ -29,13 +36,16 @@ private:
 	Lexer( Lexer const & );
 	Lexer const & operator=( Lexer const & );
 
-	std::vector<std::string, TokenType>	_tokenArray;
-	unsigned int						_index;
+	std::vector<std::string>	_lineArray;
+	unsigned int				_lineIndex;
+	std::vector<Token>			_tokenArray;
+	unsigned int				_tokenIndex;
 
 public:
 
-	Lexer( std::string line );
+	Lexer( std::vector<std::string> lines );
 	~Lexer( void );
 
-	TokenType	getNextToken( std::string *s );
+	bool	getNextToken( Token *token );
+
 };
