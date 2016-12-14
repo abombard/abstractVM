@@ -5,26 +5,29 @@
 # include <regex>
 
 enum class TokenId {
-	push = 0,
-	pop,
-	dump,
-	assert,
-	add,
-	sub,
-	mul,
-	div,
-	mod,
-	print,
-	exit,
-	comment,
-	integerIdentifier,
-	integer,
-	decimalIdentifier,
-	decimal,
+	Push = 0,
+	Pop,
+	Dump,
+	Assert,
+	Add,
+	Sub,
+	Mul,
+	Div,
+	Mod,
+	Print,
+	Exit,
+	Comment,
+	Int8,
+	Int16,
+	Int32,
+	Float,
+	Double,
 	EOL,
-	undefined,
-	none
+	Undefined,
+	None
 };
+
+std::string	tokenIdToString( TokenId tokenId );
 
 typedef struct {
 	std::string		str;

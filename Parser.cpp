@@ -1,67 +1,95 @@
 #include "Parser.hpp"
+#include <regex>
 
-Parser::Parser( void ) : _state( TokenId::undefined ), _nextState( TokenId::undefined ) { }
+Parser::Parser( void ) {
+	_prev.id = TokenId::Undefined;
+	_prev.str = std::string("");
+}
 Parser::~Parser( void ) { }
 
+std::string	Parser::parseDigit( Token const & token ) {
+	switch ( token.id ) {
+		case TokenId::Int8:
+		case TokenId::Int16:
+		case TokenId::Int32:
+			if (! std::regex_match( token.str, std::regex("\\([0-9]+\\)") )) {
+				throw UnexpectedTokenException( _prev, token );
+			}
+
+			break ;
+		case TokenId::Float:
+		case TokenId::Double:
+			if (! std::regex_match( token.str, std::regex("\\([0-9]+\\.[0-9]+\\)") )) {
+				throw UnexpectedTokenException( _prev, token );
+			}
+
+			break ;
+		default:
+			throw std::runtime_error("parseDigit Error");
+
+			break ;
+	}
+
+	size_t	index = token.str.find('(');
+	size_t	size = token.str.find();
+}
+
 void	Parser::parse( Token const & token ) {
-	
+
 	std::cout << "Parser::parse: token {" << token.str << "}" << std::endl;
 
-	switch ( _state ) {
-		case TokenId::undefined:
-			if ( token.id == TokenId::integerIdentifier ||
-				 token.id == TokenId::integer ||
-				 token.id == TokenId::decimalIdentifier ||
-				 token.id == TokenId::decimal ) {
-				throw UnexpectedTokenException( token );
+	switch ( _prev.id ) {
+		case TokenId::Undefined:
+			if ( token.id == TokenId::Int8 ||
+				 token.id == TokenId::Int16 ||
+				 token.id == TokenId::Int32 ||
+				 token.id == TokenId::Float ||
+				 token.id == TokenId::Double) {
+				throw UnexpectedTokenException( _prev, token );
 			}
 
 			break ;
-		case TokenId::push:
-		case TokenId::assert:
-			if ( token.id != TokenId::integerIdentifier &&
-				 token.id != TokenId::decimalIdentifier ) {
-				throw UnexpectedTokenException( token );
+		case TokenId::Push:
+		case TokenId::Assert:
+			if ( token.id != TokenId::Int8 &&
+				 token.id != TokenId::Int16 &&
+				 token.id != TokenId::Int32 &&
+				 token.id != TokenId::Float &&
+				 token.id != TokenId::Double) {
+				throw UnexpectedTokenException( _prev, token );
 			}
 
-			break ;
-		case TokenId::integerIdentifier:
-			if ( token.id != TokenId::integer ) {
-				throw UnexpectedTokenException( token );
-			}
+
 
 			break ;
-		case TokenId::decimalIdentifier:
-			if ( token.id != TokenId::decimal ) {
-				throw UnexpectedTokenException( token );
-			}
-
-			break ;
-		case TokenId::pop:
-		case TokenId::dump:
-		case TokenId::add:
-		case TokenId::sub:
-		case TokenId::mul:
-		case TokenId::div:
-		case TokenId::mod:
-		case TokenId::print:
-		case TokenId::exit:
-		case TokenId::comment:
-		case TokenId::integer:
-		case TokenId::decimal:
+		case TokenId::Pop:
+		case TokenId::Dump:
+		case TokenId::Add:
+		case TokenId::Sub:
+		case TokenId::Mul:
+		case TokenId::Div:
+		case TokenId::Mod:
+		case TokenId::Print:
+		case TokenId::Exit:
+		case TokenId::Comment:
+		case TokenId::Int8:
+		case TokenId::Int16:
+		case TokenId::Int32:
+		case TokenId::Float:
+		case TokenId::Double:
 			if ( token.id != TokenId::EOL ||
-				 token.id != TokenId::comment ) {
-				throw UnexpectedTokenException( token );
+				 token.id != TokenId::Comment ) {
+				throw UnexpectedTokenException( _prev, token );
 			}
 
 			break ;
 		case TokenId::EOL:
-		case TokenId::none:
+		case TokenId::None:
 		default:
 			throw std::logic_error("Invalid token");
 
 			break ;
 	}
 
-	_state = token.id;
+	_prev = token;
 }
