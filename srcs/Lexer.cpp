@@ -69,12 +69,11 @@ static TokenId				identifyTokenId( std::string token ) {
 		{ TokenId::Mod, std::regex("^mod$") },
 		{ TokenId::Print, std::regex("^print$") },
 		{ TokenId::Exit, std::regex("^exit$") },
-		{ TokenId::Comment, std::regex("^;.+$") },
-		{ TokenId::Int8, std::regex("^int8") },
-		{ TokenId::Int16, std::regex("^int16") },
-		{ TokenId::Int32, std::regex("^int32") },
-		{ TokenId::Float, std::regex("^float") },
-		{ TokenId::Double, std::regex("^double") },
+		{ TokenId::Int8, std::regex("^int8\\([0-9]+\\)") },
+		{ TokenId::Int16, std::regex("^int16\\([0-9]+\\)") },
+		{ TokenId::Int32, std::regex("^int32\\([0-9]+\\)") },
+		{ TokenId::Float, std::regex("^float\\([0-9]+\\.[0-9]+\\)") },
+		{ TokenId::Double, std::regex("^double\\([0-9]+\\.[0-9]+\\)") },
 	};
 
 	for (unsigned int i = 0; i < sizeof(tokenIdentifierArray) / sizeof(tokenIdentifierArray[0]); i ++) {
@@ -83,37 +82,52 @@ static TokenId				identifyTokenId( std::string token ) {
 		}
 	}
 
-	return TokenId::Undefined;
+	return TokenId::None;
 }
 
 static std::vector<Token>	split_line( std::string line ) {
 	std::vector<Token>	tokenArray;
 
-	// split string in tokens
-	Token	token;
-
 	size_t	pos = 0;
 	size_t	newPos;
 
+	// Remove comment if any
+	std::string	comment;
+	pos = line.find(';');
+	if ( pos != std::string::npos ) {
+		comment = line.substr( pos, line.size() - pos );
+		line = line.substr( 0, pos );
+	}
+
+	// split string in tokens
+	Token	token;
+	token.id = TokenId::Undefined;
+
+	pos = 0;
 	while ( newPos != std::string::npos ) {
-		newPos = line.find_first_of(" ", pos);
-		if ( newPos == std::string::npos ) {
-			break ;
-		}
+		newPos = line.find(" ", pos);
 
 		token.str = line.substr( pos, newPos - pos );
 		token.id = identifyTokenId( token.str );
 
 		// digits
 
-		std::cout << "Token {" << token.str << "} id " << tokenIdToString( token.id ) << " pos " << pos << " newPos " << newPos << std::endl;
+		//std::cout << "Token {" << token.str << "} id " << tokenIdToString( token.id ) << " pos " << pos << " newPos " << newPos << std::endl;
 
-		tokenArray.push_back(token);
+		if ( !token.str.empty() ) {
+			tokenArray.push_back(token);
+		}
 
 		pos = newPos + 1;
 	}
 
-	token.str = std::string("\n");
+	if (! comment.empty() ) {
+		token.str = comment;
+		token.id = TokenId::Comment;
+		tokenArray.push_back( token );
+	}
+
+	token.str = std::string();
 	token.id = TokenId::EOL;
 	tokenArray.push_back(token);
 

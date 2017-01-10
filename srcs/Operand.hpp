@@ -12,16 +12,18 @@ class Operand : public IOperand
 
 private:
 
-    std::string     _value;
+    std::string const     _value;
 
 	Operand( void ) { }
 
 public:
 
-    Operand( std::string value ) : _value( value ) { }
+    Operand( std::string value ) : _value( value ) { std::cout << "New operand {" << toString() << "}" << std::endl; }
     virtual ~Operand( void ) { }
-	Operand( Operand const & op ) { _value = op._value; }
-	Operand const & operator=( Operand const & op ) { _value = op._value; }
+	Operand( Operand const & op ) : _value( op._value ) { }
+	Operand const & operator=( Operand const & op ) {
+		_value = op._value;
+	}
 
 	virtual eOperandType    getType( void ) const;
 	virtual int             getPrecision( void ) const { return static_cast<int>( getType() ); }
@@ -168,6 +170,7 @@ public:
     }
 
 	virtual std::string const & toString( void ) const {
+		std::cerr << "_value: " << _value << std::endl;
         return _value;
     }
 
