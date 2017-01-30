@@ -31,8 +31,6 @@ IOperand const * Parser::parseDigit( Token const & token ) {
 
 void	Parser::parse( Token const & token ) {
 
-	//std::cout << "Parser::parse: token {" << token.str << "} type " << tokenIdToString( token.id ) << std::endl;
-
 	// Check the tokenId is valid
 	switch ( _prev.id ) {
 		case TokenId::Undefined:
@@ -123,16 +121,6 @@ void	Parser::parse( Token const & token ) {
 			break ;
 		case TokenId::EOL:
 			instructions.push_back( _cmd );
-
-			std::cerr << "New instruction: " << tokenIdToString( _cmd.operation ) << " operand ";
-			if (_cmd.operand != 0)
-			{
-				std::cerr << _cmd.operand->toString() << " eOperandType " << (int)_cmd.operand->getType() << std::endl;
-			}
-			else
-			{
-				std::cerr << "NULL" << std::endl;
-			}
 
 			_cmd = Command( TokenId::Undefined );
 

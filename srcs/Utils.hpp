@@ -29,7 +29,7 @@ namespace Utils
 
 	    s >> result;
 	    if (!s) {
-	        std::cout << "Bad convertion" << std::endl;
+	    	throw std::logic_error("Bad conversion");
 	    }
 	    return result;
 	}

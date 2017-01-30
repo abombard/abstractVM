@@ -113,8 +113,6 @@ static std::vector<Token>	split_line( std::string line ) {
 
 		// digits
 
-		//std::cout << "Token {" << token.str << "} id " << tokenIdToString( token.id ) << " pos " << pos << " newPos " << newPos << std::endl;
-
 		if ( !token.str.empty() ) {
 			tokenArray.push_back(token);
 		}

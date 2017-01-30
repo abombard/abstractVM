@@ -24,7 +24,6 @@ int main() {
 	Token	token;
 	while (lexer.getNextToken( &token )) {
 
-		std::cout << "token {" << token.str << "}" << " type " << tokenIdToString( token.id ) << std::endl;
 		parser.parse( token );
 	}
 
@@ -52,7 +51,7 @@ int main() {
 
 	}
 	catch ( std::exception const & e ) {
-		std::cout << e.what() << std::endl;
+		std::cerr << e.what() << std::endl;
 	}
 
 	return 0;

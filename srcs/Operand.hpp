@@ -17,7 +17,7 @@ private:
 
 public:
 
-    Operand( std::string value ) : _value( value ) { std::cout << "New operand {" << toString() << "}" << std::endl; }
+    Operand( std::string value ) : _value( value ) { }
     virtual ~Operand( void ) { }
 	Operand( Operand const & op ) : _value( op._value ) { }
 	Operand const & operator=( Operand const & op ) {
@@ -169,7 +169,6 @@ public:
     }
 
 	virtual std::string const & toString( void ) const {
-		std::cerr << "_value: " << _value << std::endl;
         return _value;
     }
 
