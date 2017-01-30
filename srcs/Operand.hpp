@@ -1,5 +1,4 @@
-#ifndef OPERAND_HPP
-# define OPERAND_HPP
+# pragma once
 
 # include "IOperand.hpp"
 # include "Factory.hpp"
@@ -181,12 +180,11 @@ public:
 		IOperand const & _rhs;
 
 	public:
-		ArithmeticException( Operand const & lhs, IOperand const & rhs ) throw() : std::logic_error("Arithmetic Exception"), _lhs( lhs ), _rhs( rhs ) {}
+		ArithmeticException( Operand const & lhs, IOperand const & rhs ) throw() : std::logic_error("Arithmetic Exception: modulo with floating point number"), _lhs( lhs ), _rhs( rhs ) {}
 		virtual ~ArithmeticException( void ) throw() {}
 
 		virtual char const * what() const throw() {
-			std::string		err = std::string(std::logic_error::what());
-			return err.c_str();
+			return std::logic_error::what();
 		}
 	};
 
@@ -200,8 +198,7 @@ public:
 		virtual ~DivideByZeroException( void ) throw() {}
 
 		virtual char const * what() const throw() {
-			std::string		err = std::string(std::logic_error::what());
-			return err.c_str();
+			return std::logic_error::what();
 		}
 	};
 
@@ -245,5 +242,3 @@ template <>
 IOperand const * Operand<double>::operator%( IOperand const & rhs ) const {
 	throw ArithmeticException( *this, rhs );
 }
-
-#endif /* OPERAND_HPP */

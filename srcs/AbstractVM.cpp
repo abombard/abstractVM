@@ -97,7 +97,7 @@ void		AbstractVM::mul( void ) {
 	lhs = _stack.front();
 	pop();
 
-	push( *lhs - *rhs );
+	push( *lhs * *rhs );
 
 	delete rhs;
 	delete lhs;

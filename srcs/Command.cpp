@@ -1,11 +1,7 @@
 #include "Command.hpp"
 
 Command::Command( TokenId id ) : operation( id ), operand( nullptr ) { }
-Command::~Command( void ) {
-	if ( operand != nullptr ) {
-		delete operand;
-	}
-}
+Command::~Command( void ) { }
 
 Command::Command( Command const & rhs) {
 	operation = rhs.operation;

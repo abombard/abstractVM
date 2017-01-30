@@ -1,0 +1,6 @@
+; erreurs syntaxe
+push int8(23)(53)
+add int8(23)(53)
+push int8(23) int8(53)
+push push push 
+exit

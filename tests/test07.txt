@@ -1,0 +1,6 @@
+push int32(12)
+push double(-2.4)
+dump
+mod
+dump
+exit

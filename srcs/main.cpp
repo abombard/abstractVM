@@ -16,7 +16,7 @@ int main() {
 		lines.push_back( line );
 	}
 
-	//try {
+	try {
 
 	Lexer	lexer( lines );
 	Parser	parser;
@@ -50,10 +50,10 @@ int main() {
 		}
 	}
 
-	/*}
+	}
 	catch ( std::exception const & e ) {
-		std::cout << e.what();
-	}*/
+		std::cout << e.what() << std::endl;
+	}
 
 	return 0;
 }

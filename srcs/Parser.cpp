@@ -18,12 +18,12 @@ IOperand const * Parser::parseDigit( Token const & token ) {
 
 	eOperandType type;
 	switch ( token.id ) {
-		case TokenId::Int8:		type = eOperandType::Int8;
-		case TokenId::Int16:	type = eOperandType::Int16;
-		case TokenId::Int32:	type = eOperandType::Int32;
-		case TokenId::Float:	type = eOperandType::Float;
-		case TokenId::Double:	type = eOperandType::Double;
-		default: break ;
+		case TokenId::Int8:		type = eOperandType::Int8; break ;
+		case TokenId::Int16:	type = eOperandType::Int16; break ;
+		case TokenId::Int32:	type = eOperandType::Int32; break ;
+		case TokenId::Float:	type = eOperandType::Float; break ;
+		case TokenId::Double:	type = eOperandType::Double; break ;
+		default: return nullptr ;
 	}
 
 	return factory.createOperand( type, digit );
@@ -106,7 +106,7 @@ void	Parser::parse( Token const & token ) {
 		case TokenId::Push:
 		case TokenId::Assert:
 		case TokenId::None:
-			_cmd = Command(token.id);
+			_cmd = Command( token.id );
 
 			break ;
 		case TokenId::Int8:
@@ -124,7 +124,15 @@ void	Parser::parse( Token const & token ) {
 		case TokenId::EOL:
 			instructions.push_back( _cmd );
 
-			std::cerr << "New instruction: " << tokenIdToString( _cmd.operation ) << " operand " << (_cmd.operand != 0 ? _cmd.operand->toString() : "NULL") << std::endl;
+			std::cerr << "New instruction: " << tokenIdToString( _cmd.operation ) << " operand ";
+			if (_cmd.operand != 0)
+			{
+				std::cerr << _cmd.operand->toString() << " eOperandType " << (int)_cmd.operand->getType() << std::endl;
+			}
+			else
+			{
+				std::cerr << "NULL" << std::endl;
+			}
 
 			_cmd = Command( TokenId::Undefined );
 

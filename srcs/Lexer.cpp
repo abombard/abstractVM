@@ -66,14 +66,15 @@ static TokenId				identifyTokenId( std::string token ) {
 		{ TokenId::Add, std::regex("^add$") },
 		{ TokenId::Sub, std::regex("^sub$") },
 		{ TokenId::Div, std::regex("^div$") },
+		{ TokenId::Mul, std::regex("^mul$") },
 		{ TokenId::Mod, std::regex("^mod$") },
 		{ TokenId::Print, std::regex("^print$") },
 		{ TokenId::Exit, std::regex("^exit$") },
-		{ TokenId::Int8, std::regex("^int8\\([0-9]+\\)") },
-		{ TokenId::Int16, std::regex("^int16\\([0-9]+\\)") },
-		{ TokenId::Int32, std::regex("^int32\\([0-9]+\\)") },
-		{ TokenId::Float, std::regex("^float\\([0-9]+\\.[0-9]+\\)") },
-		{ TokenId::Double, std::regex("^double\\([0-9]+\\.[0-9]+\\)") },
+		{ TokenId::Int8, std::regex("^int8\\(-?[0-9]+\\)") },
+		{ TokenId::Int16, std::regex("^int16\\(-?[0-9]+\\)") },
+		{ TokenId::Int32, std::regex("^int32\\(-?[0-9]+\\)") },
+		{ TokenId::Float, std::regex("^float\\(-?[0-9]+\\.([0-9]+)?\\)") },
+		{ TokenId::Double, std::regex("^double\\(-?[0-9]+\\.([0-9]+)?\\)") },
 	};
 
 	for (unsigned int i = 0; i < sizeof(tokenIdentifierArray) / sizeof(tokenIdentifierArray[0]); i ++) {

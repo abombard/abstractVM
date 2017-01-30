@@ -1,5 +1,4 @@
-#ifndef TOSTRING_HPP
-# define TOSTRING_HPP
+# pragma once
 
 # include <iostream>
 # include <sstream>
@@ -45,5 +44,3 @@ namespace Utils
 	}
 
 };
-
-#endif
