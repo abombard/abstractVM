@@ -1,29 +1,59 @@
 #include <iostream>
+#include <fstream>
 #include <iterator>
 
 #include "AbstractVM.hpp"
 #include "Lexer.hpp"
 #include "Parser.hpp"
 
-int main() {
+int main(int argc, char **argv) {
 
-	AbstractVM	avm;
+	if (argc != 1 && argc != 2) {
+		std::cerr << "Usage: " << argv[0] << " " << "file" << std::endl;
+		return (1);
+	}
 
 	std::vector<std::string>	lines;
 	std::string					line;
 
-	while (std::getline( std::cin, line )) {
-		lines.push_back( line );
+	if (argc == 1) {
+		while (line.compare( ";;" )) {
+			std::getline( std::cin, line );
+			if (std::cin.eof() == 1) {
+				std::cin.clear();
+				std::cin.ignore();
+				continue ;
+			}
+			lines.push_back( line );
+		}
+	}
+	if (argc == 2) {
+		std::fstream	fs;
+
+		fs.open( argv[1], std::fstream::in );
+		if ( fs.fail() ) {
+			std::cerr << "Failed to open file" << std::endl;
+			return (1);
+		}
+		while (std::getline( fs, line )) {
+			lines.push_back( line );
+		}
+		fs.close();
+	}
+
+	if ( lines.empty() ) {
+		return ( 0 );
 	}
 
 	try {
+
+	AbstractVM	avm;
 
 	Lexer	lexer( lines );
 	Parser	parser;
 
 	Token	token;
 	while (lexer.getNextToken( &token )) {
-
 		parser.parse( token );
 	}
 

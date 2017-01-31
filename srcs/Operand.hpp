@@ -17,7 +17,9 @@ private:
 
 public:
 
-    Operand( std::string value ) : _value( value ) { }
+    Operand( std::string value ) : _value( value ) {
+		Utils::stringTo<T>( value );
+    }
     virtual ~Operand( void ) { }
 	Operand( Operand const & op ) : _value( op._value ) { }
 	Operand const & operator=( Operand const & op ) {
@@ -33,6 +35,11 @@ public:
         {
             T lhs_value = Utils::stringTo<T>( toString() );
             T rhs_value = Utils::stringTo<T>( rhs.toString() );
+
+			if ( lhs_value + rhs_value < std::numeric_limits<T>::min() ||
+				 lhs_value + rhs_value > std::numeric_limits<T>::max() ) {
+				throw std::overflow_error( "Overflow exception: " + toString() + " + " + rhs.toString() );
+			}
 
             return factory.createOperand(
                     getType(),
@@ -61,6 +68,11 @@ public:
             T lhs_value = Utils::stringTo<T>( toString() );
             T rhs_value = Utils::stringTo<T>( rhs.toString() );
 
+			if ( lhs_value - rhs_value < std::numeric_limits<T>::min() ||
+				 lhs_value - rhs_value > std::numeric_limits<T>::max() ) {
+				throw std::overflow_error( "Overflow exception: " + toString() + " - " + rhs.toString() );
+			}
+
             return factory.createOperand(
                     getType(),
                     Utils::toString<T>( lhs_value - rhs_value )
@@ -87,6 +99,11 @@ public:
         {
             T lhs_value = Utils::stringTo<T>( toString() );
             T rhs_value = Utils::stringTo<T>( rhs.toString() );
+
+			if ( lhs_value * rhs_value < std::numeric_limits<T>::min() ||
+				 lhs_value * rhs_value > std::numeric_limits<T>::max() ) {
+				throw std::overflow_error( "Overflow exception: " + toString() + " * " + rhs.toString() );
+			}
 
             return factory.createOperand(
                     getType(),
@@ -118,6 +135,11 @@ public:
 			if (rhs_value == 0)
 				throw DivideByZeroException( *this, rhs );
 
+			if ( lhs_value / rhs_value < std::numeric_limits<T>::min() ||
+				 lhs_value / rhs_value > std::numeric_limits<T>::max() ) {
+				throw std::overflow_error( "Overflow exception: " + toString() + " / " + rhs.toString() );
+			}
+
             return factory.createOperand(
                     getType(),
                     Utils::toString<T>( lhs_value / rhs_value )
@@ -147,6 +169,11 @@ public:
 
 			if (rhs_value == 0)
 				throw DivideByZeroException( *this, rhs );
+
+			if ( lhs_value % rhs_value < std::numeric_limits<T>::min() ||
+				 lhs_value % rhs_value > std::numeric_limits<T>::max() ) {
+				throw std::overflow_error( "Overflow exception: " + toString() + " % " + rhs.toString() );
+			}
 
             return factory.createOperand(
                     getType(),

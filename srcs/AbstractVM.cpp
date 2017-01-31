@@ -104,7 +104,7 @@ void		AbstractVM::div( void ) {
 	lhs = _stack.front();
 	pop();
 
-	push( *rhs / *lhs );
+	push( *lhs / *rhs );
 
 	delete rhs;
 	delete lhs;
@@ -140,7 +140,9 @@ void		AbstractVM::print( void ) {
 		throw std::runtime_error(std::string(__func__) + ": Operand is not an Int8");
 	}
 
-	std::cout << op->toString() << std::endl;
+	int8_t	value = std::stoi( op->toString() );
+
+	std::cout << value << std::endl;
 }
 
 void		AbstractVM::exit( void ) {

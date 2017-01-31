@@ -24,22 +24,31 @@ namespace Utils
 
 	template <typename T>
 	T 			stringTo( std::string const & str ) {
-	    std::stringstream   s(str);
+	    std::stringstream   s( str );
 	    T                   result;
 
 	    s >> result;
-	    if (!s) {
-	    	throw std::logic_error("Bad conversion");
+	    if ( s.fail() ) {
+			throw std::overflow_error( "Overflow error: " + str );
 	    }
 	    return result;
 	}
 
 	template <>
 	int8_t 		stringTo( std::string const & str ) {
-		std::stringstream	s(str);
+		std::stringstream	s( str );
 		int16_t				result;
 
 		s >> result;
+		if ( s.fail() ) {
+			throw std::overflow_error( "Overflow error: " + str );
+	    }
+
+		if ( result < std::numeric_limits<int8_t>::min() ||
+			 result > std::numeric_limits<int8_t>::max() ) {
+			throw std::overflow_error( "Overflow error: " + str );
+		}
+
 		return static_cast<int8_t>( result );
 	}
 
