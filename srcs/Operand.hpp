@@ -36,8 +36,10 @@ public:
             T lhs_value = Utils::stringTo<T>( toString() );
             T rhs_value = Utils::stringTo<T>( rhs.toString() );
 
-			if ( lhs_value + rhs_value < std::numeric_limits<T>::min() ||
-				 lhs_value + rhs_value > std::numeric_limits<T>::max() ) {
+			long double res = static_cast<long double>(lhs_value) + static_cast<long double>(rhs_value);
+
+			if ( res < std::numeric_limits<T>::lowest() ||
+				 res > std::numeric_limits<T>::max() ) {
 				throw std::overflow_error( "Overflow exception: " + toString() + " + " + rhs.toString() );
 			}
 
@@ -68,8 +70,10 @@ public:
             T lhs_value = Utils::stringTo<T>( toString() );
             T rhs_value = Utils::stringTo<T>( rhs.toString() );
 
-			if ( lhs_value - rhs_value < std::numeric_limits<T>::min() ||
-				 lhs_value - rhs_value > std::numeric_limits<T>::max() ) {
+			long double res = static_cast<long double>(lhs_value) - static_cast<long double>(rhs_value);
+
+			if ( res < std::numeric_limits<T>::lowest() ||
+				 res > std::numeric_limits<T>::max() ) {
 				throw std::overflow_error( "Overflow exception: " + toString() + " - " + rhs.toString() );
 			}
 
@@ -100,8 +104,10 @@ public:
             T lhs_value = Utils::stringTo<T>( toString() );
             T rhs_value = Utils::stringTo<T>( rhs.toString() );
 
-			if ( lhs_value * rhs_value < std::numeric_limits<T>::min() ||
-				 lhs_value * rhs_value > std::numeric_limits<T>::max() ) {
+			long double res = static_cast<long double>(lhs_value) * static_cast<long double>(rhs_value);
+
+			if ( res < std::numeric_limits<T>::lowest() ||
+				 res > std::numeric_limits<T>::max() ) {
 				throw std::overflow_error( "Overflow exception: " + toString() + " * " + rhs.toString() );
 			}
 
@@ -135,8 +141,10 @@ public:
 			if (rhs_value == 0)
 				throw DivideByZeroException( *this, rhs );
 
-			if ( lhs_value / rhs_value < std::numeric_limits<T>::min() ||
-				 lhs_value / rhs_value > std::numeric_limits<T>::max() ) {
+			long double res = static_cast<long double>(lhs_value) / static_cast<long double>(rhs_value);
+
+			if ( res < std::numeric_limits<T>::lowest() ||
+				 res > std::numeric_limits<T>::max() ) {
 				throw std::overflow_error( "Overflow exception: " + toString() + " / " + rhs.toString() );
 			}
 
@@ -170,8 +178,10 @@ public:
 			if (rhs_value == 0)
 				throw DivideByZeroException( *this, rhs );
 
-			if ( lhs_value % rhs_value < std::numeric_limits<T>::min() ||
-				 lhs_value % rhs_value > std::numeric_limits<T>::max() ) {
+			long long res = static_cast<long long>(lhs_value) % static_cast<long long>(rhs_value);
+
+			if ( res < std::numeric_limits<T>::lowest() ||
+				 res > std::numeric_limits<T>::max() ) {
 				throw std::overflow_error( "Overflow exception: " + toString() + " % " + rhs.toString() );
 			}
 

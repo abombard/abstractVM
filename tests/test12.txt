@@ -1,0 +1,6 @@
+push int32(10000)
+push int32(1000000000)
+dump
+mul
+dump
+exit
