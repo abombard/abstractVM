@@ -53,5 +53,6 @@ public:
 	~Lexer( void );
 
 	bool	getNextToken( Token *token );
+	void	flush_line( void );
 
 };

@@ -13,6 +13,7 @@ private:
 
 	std::list<Command>	instructions;
 
+	int			_line;
 	Command		_cmd;
 	Token		_prev;
 
@@ -24,6 +25,9 @@ public:
 	~Parser( void );
 
 	void	parse( Token const & token );
+	void	flush( void );
+	void	eof( void );
+
 	std::list<Command>	getInstructions( void );
 
 	class UnexpectedTokenException : public std::logic_error {
@@ -34,7 +38,7 @@ public:
 		UnexpectedTokenException const & operator=( UnexpectedTokenException const & );
 
 	public:
-		UnexpectedTokenException( Token const & prev, Token const & cur ) throw() : std::logic_error("Unexpected token near '" + prev.str + "':'" + cur.str + "' of type " + tokenIdToString(cur.id)) { }
+		UnexpectedTokenException( int const line, Token const & prev, Token const & cur ) throw() : std::logic_error("Unexpected token at line " + std::to_string( line ) + " near '" + prev.str + "':'" + cur.str + "' of type " + tokenIdToString(cur.id)) { }
 		virtual ~UnexpectedTokenException( void ) throw() {}
 		UnexpectedTokenException( UnexpectedTokenException const & );
 

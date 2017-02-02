@@ -2,6 +2,7 @@
 #include "GlobalFactory.hpp"
 
 Parser::Parser( void ) : _cmd( Command( TokenId::Undefined ) ) {
+	_line = 0;
 	_prev.id = TokenId::Undefined;
 	_prev.str = std::string("");
 }
@@ -39,7 +40,7 @@ void	Parser::parse( Token const & token ) {
 				 token.id == TokenId::Int32 ||
 				 token.id == TokenId::Float ||
 				 token.id == TokenId::Double ) {
-				throw UnexpectedTokenException( _prev, token );
+				throw UnexpectedTokenException( _line, _prev, token );
 			}
 
 			break ;
@@ -50,7 +51,7 @@ void	Parser::parse( Token const & token ) {
 				 token.id != TokenId::Int32 &&
 				 token.id != TokenId::Float &&
 				 token.id != TokenId::Double ) {
-				throw UnexpectedTokenException( _prev, token );
+				throw UnexpectedTokenException( _line, _prev, token );
 			}
 
 			break ;
@@ -70,20 +71,20 @@ void	Parser::parse( Token const & token ) {
 		case TokenId::Double:
 			if ( token.id != TokenId::EOL &&
 				 token.id != TokenId::Comment ) {
-				throw UnexpectedTokenException( _prev, token );
+				throw UnexpectedTokenException( _line, _prev, token );
 			}
 
 			break ;
 		case TokenId::Comment:
 			if ( token.id != TokenId::EOL ) {
-				throw UnexpectedTokenException( _prev, token );
+				throw UnexpectedTokenException( _line, _prev, token );
 			}
 
 			break ;
 		case TokenId::EOL:
 		case TokenId::None:
 		default:
-			throw std::logic_error("Invalid token");
+			throw std::logic_error("Invalid token: '" + token.str + "'");
 
 			break ;
 	}
@@ -117,10 +118,12 @@ void	Parser::parse( Token const & token ) {
 			break ;
 		case TokenId::Comment:
 			_cmd.comment = token.str;
+			_cmd.operation = TokenId::Comment;
 
 			break ;
 		case TokenId::EOL:
 			instructions.push_back( _cmd );
+			_line ++;
 
 			_cmd = Command( TokenId::Undefined );
 
@@ -129,8 +132,38 @@ void	Parser::parse( Token const & token ) {
 
 			break ;
 		default:
-			throw std::runtime_error("Parser::parser Error");
+			throw std::logic_error("Parser::parser Error");
 
 			break ;
+	}
+}
+
+void	Parser::flush( void ) {
+	_cmd = Command( TokenId::Undefined );
+
+	_prev.id = TokenId::Undefined;
+	_prev.str = std::string();
+
+	_line ++;
+}
+
+void	Parser::eof( void ) {
+	Command	*lastCommand = NULL;
+	bool	found = false;
+
+	for ( auto it = instructions.rbegin(); it != instructions.rend(); it ++ ) {
+		lastCommand = &(*it);
+		if ( lastCommand->operation != TokenId::Comment && lastCommand->operation != TokenId::EOL ) {
+			found = true;
+			break ;
+		}
+	}
+
+	if ( found == false ) {
+		throw std::logic_error("Unexpected token at end of file: expected token 'Exit' but found 'None'");
+	}
+
+	if ( lastCommand->operation != TokenId::Exit ) {
+		throw std::logic_error("Unexpected token at end of file: expected token 'Exit' but found '" + tokenIdToString( lastCommand->operation ) + "'");
 	}
 }

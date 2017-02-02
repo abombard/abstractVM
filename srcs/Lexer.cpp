@@ -139,6 +139,15 @@ Lexer::Lexer( std::vector<std::string> lines ) : _lineArray( lines ), _lineIndex
 }
 Lexer::~Lexer( void ) { }
 
+void	Lexer::flush_line( void ) {
+	if ( _lineIndex == _lineArray.size() ) {
+		return ;
+	}
+	_tokenArray = split_line( _lineArray[_lineIndex] );
+	_tokenIndex = 0;
+	_lineIndex ++;
+}
+
 bool	Lexer::getNextToken( Token *token ) {
 	if ( _tokenIndex == _tokenArray.size() ) {
 		if ( _lineIndex == _lineArray.size() ) {
